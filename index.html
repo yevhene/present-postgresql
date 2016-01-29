@@ -18,6 +18,7 @@
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="css/custom.css">
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -36,7 +37,246 @@
 		<div class="reveal">
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
+				<section>
+          <h1>PostgreSQL</h1>
+          <h3>За что я люблю</h3>
+          <p>
+            <small>Created by <a href="mailto:yevhene@gmail.com">Yevhen Shemet</a></small>
+            <br />
+            <small>Source <a href="http://github.com/yevhene/presentation-postgresql">yevhene/presentation-postgresql</a></small>
+          </p>
+        </section>
 
+				<section>
+          <h3>Что такое PostgreSQL</h3>
+
+          <p>Свободная объектно-реляционная система управления базами данных.</p>
+        </section>
+
+				<section>
+          <h3>История PostgreSQL</h3>
+          <ul>
+          	<li>Начало разработки 1986 год. Разрабатывалась как другой взгляд на InGres (1970) ее создателем. Название Postgres расшифровывается как post-Ingres.</li>
+          	<li>Изначально разрабатывался как открытый университетский проект <i>University of California, Berkeley</i>. Первый релиз 1989 год. <small>MSSQL 1989, MySQL 1995</small></li>
+          	<li>1994 год - выпущена под лицензией MIT. В 1996-м году отказались от внутреннего языка POSTQUEL. И приняли стандарт SQL. Что и отразили в названии PostgreSQL. Первая версия PostgreSQL 6.0</li>
+          </ul>
+        </section>
+
+				<section>
+          <h3>Сравнение</h3>
+
+          <section>
+          	<h4>Бенчмарки</h4>
+
+          	<p>В большинстве своем спекулятивные. Драматического различия нет.</p>
+
+          	<p><i>Популярно мнение что PostgreSQL реализация под Windows уступает MSSQL и PostgreSQL под Linux.</i></p>
+          </section>
+
+          <section>
+          	<h4>Популярность</h4>
+
+          	<p><img src="img/popularity.png" /></p>
+          </section>
+
+          <section>
+          	<h4>Доступность</h4>
+
+          	<p>MySQL и PostgreSQL кросплатформенные.</p>
+          	<p>MSSQL нет.</p>
+          </section>
+
+          <section>
+          	<h4>SQL</h4>
+
+          	<p>MSSQL и PostgreSQL поддерживают продвинутые фичи стандарта типа <strong class="story">Windowing Functions</strong> и
+          	<strong class="story">Common Table Expressions</strong>.</p>
+          	<p>MySQL реализует ограниченую поддержку стандарта SQL.</p>
+          </section>
+
+          <section>
+          	<h4>SQL</h4>
+
+          	<p>PostgreSQL может индексировать по функции. Также поддерживает разные алгоритмы индексирования.</p>
+          	<p>MSSQL и MySQL поддерживают вычисляемые колонки.</p>
+          </section>
+        </section>
+
+        <section>
+          <h3>Индексы PostgreSQL</h3>
+
+          <section>
+            <h4>Expression</h4>
+
+            <pre><code data-trim data-noescape>
+              CREATE INDEX users_name ON users (lower(name));
+            </code></pre>
+          </section>
+
+          <section>
+          	<h4>Hash</h4>
+
+          	<p>Позволяет использовать операторы:</p>
+
+          	<dl>
+          		<dt>=</dt><dd>равенство</dd>
+          	</dl>
+          </section>
+
+          <section>
+          	<h4>B-Tree</h4>
+
+          	<p>Позволяет использовать операторы:</p>
+
+          	<dl>
+          		<dt>&lt;</dt><dd>меньше</dd>
+          		<dt>&lt;=</dt><dd>меньше либо равно</dd>
+          		<dt>&gt;</dt><dd>больше</dd>
+          		<dt>&gt;=</dt><dd>больше либо равно</dd>
+          	</dl>
+          </section>
+
+          <section>
+          	<h4>GiST</h4>
+
+          	<p>Generalized Search Tree</p>
+
+          	<small>Это не определенный индекс, а инфраструктура которая позволяет реализовать разные стратегии индексированя для разных типов данных.</small>
+
+          	<ul>
+          		<li>Фиксированной длинны</li>
+          		<li>Быстро строится и обновляется</li>
+          		<li>Дольше поиск</li>
+          		<li>Возможны вальшивие срабатывания</li>
+          	</ul>
+
+          	<pre><code data-trim data-noescape>
+CREATE INDEX name ON table USING gist(column);
+          	</code></pre>
+          </section>
+
+          <section>
+          	<h4>GiST</h4>
+
+          	<p>Для геометрических данных позволяет использовать:</p>
+
+          	<dl>
+          		<dt>&lt;&lt;</dt><dd>Строго слева от</dd>
+          		<dt>&amp;&lt;</dt><dd>Строго справа от</dd>
+          		<dt>&amp;&gt;</dt><dd>Не расширяет вправо от</dd>
+          		<dt>&gt;&gt;</dt><dd>Не расширяет влево от</dd>
+          		<dt>&lt;&lt;|</dt><dd>Строго снизу</dd>
+          		<dt>&amp;&lt;|</dt><dd>Не расширяет вниз</dd>
+          		<dt>|&amp;&gt;</dt><dd>Не расширяет вверх</dd>
+          		<dt>|&gt;&gt;</dt><dd>Строго сверху</dd>
+          		<dt>~</dt><dd>Содержит</dd>
+          		<dt>@</dt><dd>Содержит в или на</dd>
+          		<dt>~=</dt><dd>Такое же как</dd>
+          		<dt>&amp;&amp;</dt><dd>Перекрывает</dd>
+          		<dt>&lt;-&gt;</dt><dd>Расстояние между</dd>
+          	</dl>
+          </section>
+
+          <section>
+          	<h4>GIN</h4>
+
+          	<p>Generalized Inverted Index</p>
+
+          	<small>Это не определенный индекс, а инфраструктура которая позволяет реализовать разные стратегии индексированя для разных типов данных.</small>
+
+          	<ul>
+          		<li>Занимает больше места</li>
+          		<li>Медленно строится</li>
+          		<li>Быстрый поиск</li>
+          		<li>Точный поиск</li>
+          	</ul>
+
+          	<pre><code data-trim data-noescape>
+CREATE INDEX name ON table USING gist(column);
+          	</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h3>Full-text</h3>
+
+          <section>
+   					<h4>Create</h4>
+
+          	<pre><code data-trim data-noescape>
+CREATE TABLE texts (
+	content text,
+	index tsvector
+);
+          	</code></pre>
+        	</section>
+
+          <section>
+   					<h4>Insert</h4>
+
+          	<pre><code data-trim data-noescape>
+INSERT INTO texts (content, tokens)
+VALUES (
+	'fat cat ate fat rats',
+	to_tsvector('english', 'fat cat ate fat rats')
+);
+          	</code></pre>
+          	<pre><code data-trim data-noescape>
+       content        |               tokens
+----------------------+-----------------------------------
+ fat cat ate fat rats | 'ate':3 'cat':2 'fat':1,4 'rat':5
+          	</code></pre>
+        	</section>
+
+        	<section>
+   					<h4>Query</h4>
+
+          	<pre><code data-trim data-noescape>
+SELECT * FROM texts
+	WHERE tokens @@ to_tsquery('cat & !dog');
+          	</code></pre>
+          	<small>Поддерживаются веса, префиксы и управляющие операторы.</small>
+          </section>
+
+          <section>
+          	<h4>Index (GiST/GiN)</h4>
+
+          	<pre><code data-trim data-noescape>
+CREATE INDEX texts_content_index ON texts USING gin(tokens);
+          	</code></pre>
+          </section>
+
+          <section>
+          	<h4>Fuzzy (Trigram)</h4>
+
+						<p>Строит триграммы</p>
+
+						<ul>
+							<li>Позволяет искать по схожести</li>
+							<li>Можно использовать GiST/GiN индексы</li>
+							<li>Можно использовать вместе с tsvector</li>
+						<pre><code data-trim data-noescape>
+SELECT show_trgm('Yevhen');
+						</code></pre>
+						<pre><code data-trim data-noescape>
+-------------------------------------
+ {"  y"," ye","en ",evh,hen,vhe,yev}
+						</code></pre>
+          </section>
+
+          <section>
+          	<h4>Fuzzy (Metaphone, dmetaphone, soundex)</h4>
+
+						<p>Превращает строку в код. Индексируется простым expression index.</p>
+						<pre><code data-trim data-noescape>
+SELECT dmetaphone('Elle Cahon'), dmetaphone('Yevhen Shemet');
+						</code></pre>
+						<pre><code data-trim data-noescape>
+------------+------------
+ ALKH       | AFNX
+						</code></pre>
+          </section>
+        </section>
 			</div>
 		</div>
 

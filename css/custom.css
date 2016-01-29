@@ -1,0 +1,23 @@
+.story {
+  border-bottom: 3px dotted #777 !important;
+}
+
+dl {
+  display: relative;
+  width: 90%;
+  overflow: hidden;
+}
+
+dt {
+  float: left;
+  width: 50%;
+  text-align: center;
+  font-size: 65% !important;
+}
+
+dd {
+  float: left;
+  width: 50%;
+  margin-left: 0 !important;
+  font-size: 65% !important;
+}
