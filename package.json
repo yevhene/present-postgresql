@@ -1,22 +1,21 @@
 {
-  "name": "reveal.js",
-  "version": "3.2.0",
-  "description": "The HTML Presentation Framework",
-  "homepage": "http://lab.hakim.se/reveal-js",
-  "subdomain": "revealjs",
+  "name": "presentation-postgresql",
+  "version": "0.1.0",
+  "description": "Presentation PostgreSQL",
+  "homepage": "http://github.com/yevhene/presentation-postgresql",
+  "subdomain": "presentation-postgresql",
   "main": "js/reveal.js",
   "scripts": {
     "test": "grunt test",
     "start": "grunt serve"
   },
   "author": {
-    "name": "Hakim El Hattab",
-    "email": "hakim.elhattab@gmail.com",
-    "web": "http://hakim.se"
+    "name": "Yevhen Shemet",
+    "email": "yevhene@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hakimel/reveal.js.git"
+    "url": "git://github.com/yevhene/presentation-postgresql"
   },
   "engines": {
     "node": "~4.1.1"
