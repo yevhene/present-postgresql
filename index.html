@@ -308,7 +308,7 @@ SELECT 'a=>1,b=>2'::hstore;
           <section>
             <h4>json</h4>
 
-            <p>Хранит валидированную копию исходного значения. Требует переразбора данных при каждом обращении</p>
+            <p>Хранит проверенную копию исходного значения. Требует переразбора данных при каждом обращении</p>
 
             <small>Можно использовать операторы:</small>
             <img src="img/json.png" />
@@ -323,6 +323,41 @@ SELECT 'a=>1,b=>2'::hstore;
 
             <small>Можно использовать операторы:</small>
             <img src="img/jsonb.png" />
+          </section>
+        </section>
+
+        <section>
+          <h3>PostgreSQL и NoSQL</h3>
+
+          <section>
+            <h4>Изначальная схема</h4>
+
+            <img src="img/example-schema.png" />
+          </section>
+
+          <section>
+            <h4>Оптимизированная схема</h4>
+
+            <img src="img/example-schema-simplified.png" />
+
+            <ul>
+              <li>Один запрос на создание/чтение/удаление</li>
+              <li>Удобнее с точки зрения ORM (если есть поддержка)</li>
+              <li>Я все еще могу использовать индексы и делать джоины почти без потерь по производительности</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4>Вопрос</h4>
+
+            <p>Теоретически мы можем использовать PostgreSQL как Document-Oriented NoSQL Database.</p>
+            <p>Почему не очень разумно говорить что PostgreSQL может вытеснить MongoDB или CouchDB?</p>
+          </section>
+
+          <section>
+            <h4>Ответ</h4>
+
+            <img src="img/cap.png" />
           </section>
         </section>
 			</div>
