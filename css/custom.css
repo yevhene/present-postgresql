@@ -21,3 +21,8 @@ dd {
   margin-left: 0 !important;
   font-size: 65% !important;
 }
+
+.small {
+  font-size: 0.6em !important;
+  line-height: 1.2em !important;
+}

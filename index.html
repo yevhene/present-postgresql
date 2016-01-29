@@ -156,28 +156,6 @@ CREATE INDEX name ON table USING gist(column);
           </section>
 
           <section>
-          	<h4>GiST</h4>
-
-          	<p>Для геометрических данных позволяет использовать:</p>
-
-          	<dl>
-          		<dt>&lt;&lt;</dt><dd>Строго слева от</dd>
-          		<dt>&amp;&lt;</dt><dd>Строго справа от</dd>
-          		<dt>&amp;&gt;</dt><dd>Не расширяет вправо от</dd>
-          		<dt>&gt;&gt;</dt><dd>Не расширяет влево от</dd>
-          		<dt>&lt;&lt;|</dt><dd>Строго снизу</dd>
-          		<dt>&amp;&lt;|</dt><dd>Не расширяет вниз</dd>
-          		<dt>|&amp;&gt;</dt><dd>Не расширяет вверх</dd>
-          		<dt>|&gt;&gt;</dt><dd>Строго сверху</dd>
-          		<dt>~</dt><dd>Содержит</dd>
-          		<dt>@</dt><dd>Содержит в или на</dd>
-          		<dt>~=</dt><dd>Такое же как</dd>
-          		<dt>&amp;&amp;</dt><dd>Перекрывает</dd>
-          		<dt>&lt;-&gt;</dt><dd>Расстояние между</dd>
-          	</dl>
-          </section>
-
-          <section>
           	<h4>GIN</h4>
 
           	<p>Generalized Inverted Index</p>
@@ -216,10 +194,10 @@ CREATE TABLE texts (
 
           	<pre><code data-trim data-noescape>
 INSERT INTO texts (content, tokens)
-VALUES (
-	'fat cat ate fat rats',
-	to_tsvector('english', 'fat cat ate fat rats')
-);
+  VALUES (
+  	'fat cat ate fat rats',
+  	to_tsvector('english', 'fat cat ate fat rats')
+  );
           	</code></pre>
           	<pre><code data-trim data-noescape>
        content        |               tokens
@@ -247,7 +225,7 @@ CREATE INDEX texts_content_index ON texts USING gin(tokens);
           </section>
 
           <section>
-          	<h4>Fuzzy (Trigram)</h4>
+          	<h4>pg_trgm<small>ext</small></h4>
 
 						<p>Строит триграммы</p>
 
@@ -265,9 +243,10 @@ SELECT show_trgm('Yevhen');
           </section>
 
           <section>
-          	<h4>Fuzzy (Metaphone, dmetaphone, soundex)</h4>
+          	<h4>fuzzysearch<small>ext</small></h4>
 
 						<p>Превращает строку в код. Индексируется простым expression index.</p>
+            <p>Доступны разные алгоритмы: <strong>metaphone</strong>, <strong>dmetaphone</strong>, <strong>soundex</strong>.</p>
 						<pre><code data-trim data-noescape>
 SELECT dmetaphone('Elle Cahon'), dmetaphone('Yevhen Shemet');
 						</code></pre>
@@ -275,6 +254,75 @@ SELECT dmetaphone('Elle Cahon'), dmetaphone('Yevhen Shemet');
 ------------+------------
  ALKH       | AFNX
 						</code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h3>Типы данных</h3>
+
+          <section>
+            <h4>geometry</h4>
+
+            <p>Включает: <i>point</i>, <i>box</i>, <i>lseg</i>, <i>line</i>, <i>path</i>, <i>polygon</i>, <i>circle</i>.<br />Много встроеных функций и операторов.</p>
+
+            <p class="small"><span>Используя GiST можно оптимизировать операторы:</span><br />&lt;&lt; <small>(Строго слева от)</small>, &amp;&lt; <small>(Строго справа от)</small>, &amp;&gt; <small>(Не расширяет вправо от)</small>, &amp;&lt; <small>(Не расширяет влево от)</small>, &lt;&lt;| <small>(Строго снизу)</small>, &amp;&lt;| <small>(Не расширяет вниз)</small>, |&amp;&gt; <small>(Не расширяет вверх)</small>, |&gt;&gt; <small>(Строго сверху)</small>, ~ <small>(Содержит)</small>, @ <small>(Содержит в или на)</small>, ~= <small>(Такое же как)</small>, &amp;&amp; <small>(Перекрывает)</small>, &lt;-&gt; <small>(Расстояние между)</small></p>
+
+            <pre><code data-trim data-noescape>
+SELECT circle '((0,0),1)' << circle '((5,0),1)';
+            </code></pre>
+
+            <pre><code data-trim data-noescape>
+----------
+ t
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>array</h4>
+
+            <pre><code data-trim data-noescape>
+CREATE TABLE tictactoe (
+  squares   integer[3][3]
+);
+            </code></pre>
+            <pre><code data-trim data-noescape>
+INSERT INTO tictactoe
+  VALUES ('{{1,2,3},{4,5,6},{7,8,9}}');
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>hstore<small>ext</small></h4>
+
+            <small>Поддерживает GiN и GiST индексы</small>
+
+            <pre><code data-trim data-noescape>
+SELECT 'a=>1,b=>2'::hstore;
+            </code></pre>
+            <pre><code data-trim data-noescape>
+--------------------
+ "a"=>"1", "b"=>"2"
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>json</h4>
+
+            <p>Хранит валидированную копию исходного значения. Требует переразбора данных при каждом обращении</p>
+
+            <small>Можно использовать операторы:</small>
+            <img src="img/json.png" />
+          </section>
+
+          <section>
+            <h4>jsonb<small>ext</small></h4>
+
+            <small>Поддерживает GiN индекс</small>
+
+            <p>Хранит разобранные данные в двоичном виде</p>
+
+            <small>Можно использовать операторы:</small>
+            <img src="img/jsonb.png" />
           </section>
         </section>
 			</div>
