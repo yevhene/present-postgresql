@@ -48,18 +48,21 @@
         </section>
 
 				<section>
-          <h3>Что такое PostgreSQL</h3>
+          <section>
+            <h3>Что такое PostgreSQL</h3>
 
-          <p>Свободная объектно-реляционная система управления базами данных.</p>
-        </section>
+            <p>Свободная объектно-реляционная система управления базами данных.</p>
+          </section>
 
-				<section>
-          <h3>История PostgreSQL</h3>
-          <ul>
-          	<li>Начало разработки 1986 год. Разрабатывалась как другой взгляд на InGres (1970) ее создателем. Название Postgres расшифровывается как post-Ingres.</li>
-          	<li>Изначально разрабатывался как открытый университетский проект <i>University of California, Berkeley</i>. Первый релиз 1989 год. <small>MSSQL 1989, MySQL 1995</small></li>
-          	<li>1994 год - выпущена под лицензией MIT. В 1996-м году отказались от внутреннего языка POSTQUEL. И приняли стандарт SQL. Что и отразили в названии PostgreSQL. Первая версия PostgreSQL 6.0</li>
-          </ul>
+          <section>
+            <h3>История PostgreSQL</h3>
+
+            <ul>
+              <li>Начало разработки 1986 год. Разрабатывалась как другой взгляд на InGres (1970) ее создателем. Название Postgres расшифровывается как post-Ingres.</li>
+              <li>Изначально разрабатывался как открытый университетский проект <i>University of California, Berkeley</i>. Первый релиз 1989 год. <small>MSSQL 1989, MySQL 1995</small></li>
+              <li>1994 год - выпущена под лицензией MIT. В 1996-м году отказались от внутреннего языка POSTQUEL. И приняли стандарт SQL. Что и отразили в названии PostgreSQL. Первая версия PostgreSQL 6.0</li>
+            </ul>
+          </section>
         </section>
 
 				<section>
@@ -95,7 +98,7 @@
           </section>
 
           <section>
-          	<h4>SQL</h4>
+          	<h4>Index</h4>
 
           	<p>PostgreSQL может индексировать по функции. Также поддерживает разные алгоритмы индексирования.</p>
           	<p>MSSQL и MySQL поддерживают вычисляемые колонки.</p>
@@ -358,6 +361,215 @@ SELECT 'a=>1,b=>2'::hstore;
             <h4>Ответ</h4>
 
             <img src="img/cap.png" />
+          </section>
+        </section>
+
+        <section>
+          <h3>Procedural Language<small>ext</small></h3>
+
+          <section>
+            <h4>PL/pgSQL</h4>
+
+            <pre><code data-trim data-noescape>
+CREATE OR REPLACE FUNCTION fnsomefunc(numtimes integer, msg text)
+RETURNS text AS $$
+DECLARE
+    strresult text;
+BEGIN
+    strresult := '';
+    IF numtimes > 0 THEN
+        FOR i IN 1 .. numtimes LOOP
+            strresult := strresult || msg || E'\n';
+        END LOOP;
+    END IF;
+    RETURN strresult;
+END;
+$$ LANGUAGE 'plpgsql';
+            </code></pre>
+            <pre><code data-trim data-noescape>
+SELECT fnsomefunc(10, 'Hello there');
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>PL/Python</h4>
+
+            <pre><code data-trim data-noescape>
+CREATE FUNCTION pymax (a integer, b integer)
+RETURNS integer AS $$
+  if a > b:
+    return a
+  return b
+$$ LANGUAGE plpythonu;
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>PL/R</h4>
+
+            <pre><code data-trim data-noescape>
+CREATE OR REPLACE FUNCTION r_median(_float8)
+  RETURNS float AS 'median(arg1)' LANGUAGE 'plr';
+
+CREATE AGGREGATE median (
+  sfunc = plr_array_accum,
+  basetype = float8,
+  stype = _float8,
+  finalfunc = r_median
+);
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>PL/PHP</h4>
+
+            <pre><code data-trim data-noescape>
+CREATE FUNCTION get_username(integer)
+RETURNS text AS $$
+  # Assign the query to a variable.
+  $query = "SELECT username FROM users WHERE id = " .$args[0];
+
+  # Run the query and get the $result object.
+  $result = spi_exec_query($query);
+
+  # Fetch the row from the $result.
+  $row = spi_fetch_row($result);
+
+  return $row['username'];
+$$ LANGUAGE 'plphp';
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>PL/*</h4>
+
+            <ul>
+              <li>PL/pgSQL</li>
+              <li>PL/Python</li>
+              <li>PL/Perl</li>
+              <li>PL/Tcl</li>
+            </ul>
+
+            <ul>
+              <li>PL/Java</li>
+              <li>PL/PHP</li>
+              <li>PL/Py</li>
+              <li>PL/R</li>
+              <li>PL/Ruby</li>
+              <li>PL/Scheme</li>
+              <li>PL/sh</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <h3>Favorite features</h3>
+
+          <section>
+            <h4>MATERIALIZED VIEW</h4>
+
+            <pre><code data-trim data-noescape>
+CREATE MATERIALIZED VIEW sales_summary AS
+  SELECT
+      seller_no,
+      invoice_date,
+      sum(invoice_amt)::numeric(13,2) as sales_amt
+    FROM invoice
+    WHERE invoice_date < CURRENT_DATE
+    GROUP BY
+      seller_no,
+      invoice_date
+    ORDER BY
+      seller_no,
+      invoice_date;
+            </code></pre>
+
+            <pre><code data-trim data-noescape>
+CREATE UNIQUE INDEX sales_summary_seller
+  ON sales_summary (seller_no, invoice_date);
+            </code></pre>
+
+            <pre><code data-trim data-noescape>
+REFRESH MATERIALIZED VIEW sales_summary;
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>UPSERT</h4>
+
+            <pre><code data-trim data-noescape>
+ INSERT INTO user_logins (username, logins)
+ VALUES ('Naomi', 1), ('James', 1)
+ ON CONFLICT (username)
+ DO UPDATE SET logins = user_logins.logins + EXCLUDED.logins;
+            </code></pre>
+
+            <pre><code data-trim data-noescape>
+username  | logins
+----------+--------
+Lois      |      2
+Naomi     |      1
+James     |      5
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>Large Object Streaming</h4>
+          </section>
+
+          <section>
+            <h4>PostGIS<small>ext</small></h4>
+
+            <p>Географические обьекты и локационные запросы</p>
+
+            <pre><code data-trim data-noescape>
+SELECT superhero.name
+FROM city, superhero
+WHERE ST_Contains(city.geom, superhero.geom)
+  AND city.name = 'Gotham';
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <h3>Contrib</h3>
+
+          <section>
+            <ul>
+              <li>Множество пакетов и расширений высокого качества</li>
+              <li>Большинство бесплатные и open source</li>
+              <li>Очень просто создавать расширения</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4>Пример</h4>
+
+            <pre><code data-trim data-noescape>
+#include "postgres.h"
+#include "fmgr.h"
+
+PG_MODULE_MAGIC;
+
+PG_FUNCTION_INFO_V1(add_ab);
+
+Datum add_ab(PG_FUNCTION_ARGS)
+{
+  int32 arg_a = PG_GETARG_INT32(0);
+  int32 arg_b = PG_GETARG_INT32(1);
+
+  PG_RETURN_INT32(arg_a + arg_b);
+}            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>Спасибо за внимание</h3>
+          </section>
+
+          <section>
+            <h3>Вопросы</h3>
           </section>
         </section>
 			</div>
