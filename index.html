@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js – The HTML Presentation Framework</title>
+		<title>Presentation PostgreSQL</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -187,7 +187,7 @@ CREATE INDEX name ON table USING gist(column);
           	<pre><code data-trim data-noescape>
 CREATE TABLE texts (
 	content text,
-	index tsvector
+	tokens tsvector
 );
           	</code></pre>
         	</section>
@@ -203,7 +203,7 @@ INSERT INTO texts (content, tokens)
   );
           	</code></pre>
           	<pre><code data-trim data-noescape>
-       content        |               tokens
+content               |               tokens
 ----------------------+-----------------------------------
  fat cat ate fat rats | 'ate':3 'cat':2 'fat':1,4 'rat':5
           	</code></pre>
@@ -220,7 +220,7 @@ SELECT * FROM texts
           </section>
 
           <section>
-          	<h4>Index (GiST/GiN)</h4>
+          	<h4>Index (GiST/GIN)</h4>
 
           	<pre><code data-trim data-noescape>
 CREATE INDEX texts_content_index ON texts USING gin(tokens);
@@ -234,7 +234,7 @@ CREATE INDEX texts_content_index ON texts USING gin(tokens);
 
 						<ul>
 							<li>Позволяет искать по схожести</li>
-							<li>Можно использовать GiST/GiN индексы</li>
+							<li>Можно использовать GiST/GIN индексы</li>
 							<li>Можно использовать вместе с tsvector</li>
 						<pre><code data-trim data-noescape>
 SELECT show_trgm('Yevhen');
@@ -297,7 +297,7 @@ INSERT INTO tictactoe
           <section>
             <h4>hstore<small>ext</small></h4>
 
-            <small>Поддерживает GiN и GiST индексы</small>
+            <small>Поддерживает GIN и GiST индексы</small>
 
             <pre><code data-trim data-noescape>
 SELECT 'a=>1,b=>2'::hstore;
@@ -320,7 +320,7 @@ SELECT 'a=>1,b=>2'::hstore;
           <section>
             <h4>jsonb<small>ext</small></h4>
 
-            <small>Поддерживает GiN индекс</small>
+            <small>Поддерживает GIN индекс</small>
 
             <p>Хранит разобранные данные в двоичном виде</p>
 
