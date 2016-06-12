@@ -2,8 +2,8 @@
   "name": "presentation-postgresql",
   "version": "0.1.0",
   "description": "Presentation PostgreSQL",
-  "homepage": "http://github.com/yevhene/presentation-postgresql",
-  "subdomain": "presentation-postgresql",
+  "homepage": "http://github.com/yevhene/present-postgresql",
+  "subdomain": "present-postgresql",
   "main": "js/reveal.js",
   "scripts": {
     "test": "grunt test",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/yevhene/presentation-postgresql"
+    "url": "git://github.com/yevhene/present-postgresql"
   },
   "engines": {
     "node": "~4.1.1"
